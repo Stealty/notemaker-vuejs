@@ -1,15 +1,27 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from "vue-router";
+import ViewNotes from "../views/ViewNotes.vue";
+import ViewStats from "../views/ViewStats.vue";
+
+const routes = [
+  {
+    path: "/",
+    name: "notes",
+    component: ViewNotes,
+  },
+  {
+    path: "/stats",
+    name: "stats",
+    component: ViewStats,
+  },
+];
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: "/",
-      name: "home",
-      component: HomeView,
-    },
-  ],
+  history: createWebHashHistory(),
+  routes: routes,
 });
 
 export default router;
