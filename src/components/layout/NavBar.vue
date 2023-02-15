@@ -1,17 +1,26 @@
 <script setup lang="ts">
 import { ref } from "vue";
-
+import { onClickOutside } from "@vueuse/core";
 const isActiveMenu = ref(false);
+const navBarRef = ref(null);
+
+onClickOutside(navBarRef, () => (isActiveMenu.value = false));
 </script>
 
 <template>
-  <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+  <nav
+    ref="navBarRef"
+    class="navbar is-primary"
+    role="navigation"
+    aria-label="main navigation"
+  >
     <div class="container is-max-desktop px-2">
       <div class="navbar-brand">
         <div class="navbar-item is-size-4 is-family-monospace">Notemaker</div>
         <a
           role="button"
           class="navbar-burger"
+          :class="{ 'is-active': isActiveMenu }"
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
