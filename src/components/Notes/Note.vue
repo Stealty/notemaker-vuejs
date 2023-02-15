@@ -23,7 +23,7 @@ const characterLenght = computed(() => {
 <template>
   <div class="card mb-5">
     <div class="card-content">
-      {{ note.content }}
+      <p style="word-wrap: break-word">{{ note.content }}</p>
     </div>
     <div class="has-text-right has-text-grey-light mt-2 mr-4">
       <small>{{ characterLenght }}</small>
