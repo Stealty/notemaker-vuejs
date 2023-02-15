@@ -37,10 +37,18 @@ function toggleActiveMenu() {
       <div class="navbar-start"></div>
 
       <div class="navbar-end">
-        <RouterLink class="navbar-item" active-class="is-active" to="/"
+        <RouterLink
+          @click="isActiveMenu = false"
+          class="navbar-item"
+          active-class="is-active"
+          to="/"
           >Notes</RouterLink
         >
-        <RouterLink class="navbar-item" active-class="is-active" to="/stats"
+        <RouterLink
+          @click="isActiveMenu = false"
+          class="navbar-item"
+          active-class="is-active"
+          to="/stats"
           >Stats</RouterLink
         >
       </div>
