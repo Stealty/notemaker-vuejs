@@ -1,4 +1,4 @@
-import { randomId } from "@/components/utils/randomId";
+import { randomId } from "@/utils/randomId";
 import { defineStore } from "pinia";
 
 export const useStoreNotes = defineStore("storeNotes", {
