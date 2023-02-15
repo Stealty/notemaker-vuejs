@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useStoreNotes } from "@/stores/globalStore";
 import { computed } from "vue";
+import { RouterLink } from "vue-router";
 
 const props = defineProps({
   note: {
@@ -8,19 +10,14 @@ const props = defineProps({
   },
 });
 
+const storeNotes = useStoreNotes();
+
 const characterLenght = computed(() => {
   const length = props.note.content.length;
   const description = length > 1 ? "Characters" : "Character";
 
   return `${length} ${description}`;
 });
-
-const emit = defineEmits(["deleteNote"]);
-
-const handleDelete = () => {
-  emit("deleteNote", props.note.id);
-  // console.log(props.note.id);
-};
 </script>
 
 <template>
@@ -32,8 +29,13 @@ const handleDelete = () => {
       <small>{{ characterLenght }}</small>
     </div>
     <footer class="card-footer">
-      <a href="#" class="card-footer-item">Edit</a>
-      <a href="#" class="card-footer-item" @click.prevent="handleDelete"
+      <RouterLink :to="`edit/${note.id}`" href="#" class="card-footer-item"
+        >Edit</RouterLink
+      >
+      <a
+        href="#"
+        class="card-footer-item"
+        @click.prevent="storeNotes.deleteNote(note.id)"
         >Delete</a
       >
     </footer>
