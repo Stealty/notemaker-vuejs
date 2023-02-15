@@ -2,11 +2,6 @@
 import { ref } from "vue";
 
 const isActiveMenu = ref(false);
-
-function toggleActiveMenu() {
-  console.log(isActiveMenu.value);
-  isActiveMenu.value = !isActiveMenu.value;
-}
 </script>
 
 <template>
