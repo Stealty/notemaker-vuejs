@@ -3,6 +3,8 @@ import router from "@/router";
 import { useStoreNotes } from "@/stores/globalStore";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+import { vAutoFocus } from "@/directives/vAutoFocus";
+import { useWatchCharacters } from "@/use/useWatchCharacters";
 
 const route = useRoute();
 const storeNotes = useStoreNotes();
@@ -14,6 +16,8 @@ function editNote() {
   noteInputRef.value.focus();
   router.back();
 }
+
+useWatchCharacters(noteInputValue, 100);
 </script>
 
 <template>
@@ -26,6 +30,8 @@ function editNote() {
           v-model="noteInputValue"
           class="textarea"
           placeholder="Add note update"
+          v-autoFocus
+          maxlength="100"
         />
       </div>
     </div>

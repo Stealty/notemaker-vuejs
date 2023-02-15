@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useStoreNotes } from "@/stores/globalStore";
+import { vAutoFocus } from "@/directives/vAutoFocus";
 import { ref } from "vue";
+import { useWatchCharacters } from "@/use/useWatchCharacters";
 
 const noteInputRef = ref<any>();
 const noteInputValue = ref("");
@@ -10,6 +12,8 @@ function addNote() {
   noteInputValue.value = "";
   noteInputRef.value.focus();
 }
+
+useWatchCharacters(noteInputValue, 100);
 </script>
 
 <template>
@@ -21,6 +25,8 @@ function addNote() {
           v-model="noteInputValue"
           class="textarea"
           placeholder="Add new note"
+          v-autoFocus
+          maxlength="100"
         />
       </div>
     </div>
