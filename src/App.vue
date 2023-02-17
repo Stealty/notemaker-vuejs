@@ -2,12 +2,12 @@
 import { onMounted } from "vue";
 import { RouterView } from "vue-router";
 import NavBar from "./components/layout/NavBar.vue";
-import { useStoreNotes } from "./stores/globalStore";
+import { useStoreAuth } from "@/stores/storeAuth";
 
-const storeNotes = useStoreNotes();
+const storeAuth = useStoreAuth();
 
 onMounted(() => {
-  storeNotes.getNotes();
+  storeAuth.init();
 });
 </script>
 
