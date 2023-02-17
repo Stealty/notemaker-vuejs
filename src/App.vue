@@ -1,6 +1,14 @@
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { RouterView } from "vue-router";
 import NavBar from "./components/layout/NavBar.vue";
+import { useStoreNotes } from "./stores/globalStore";
+
+const storeNotes = useStoreNotes();
+
+onMounted(() => {
+  storeNotes.getNotes();
+});
 </script>
 
 <template>

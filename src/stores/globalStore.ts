@@ -1,33 +1,71 @@
 import { randomId } from "@/utils/randomId";
 import { defineStore } from "pinia";
+import {
+  collection,
+  onSnapshot,
+  setDoc,
+  doc,
+  orderBy,
+  query,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "@/database/firebase";
+import { currentDate } from "@/utils/currentDate";
 
+type NoteType = {
+  id: string;
+  content: string;
+  date: string;
+};
+
+const notesColectionRef = collection(db, "notes");
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
     return {
-      notes: [
-        {
-          id: "123123",
-          content: "asd",
-        },
-      ],
+      notes: [] as NoteType[],
+      notesLoaded: false,
     };
   },
   actions: {
-    addNewNote(value: string) {
-      const note = {
-        id: randomId(),
-        content: value,
-      };
-      this.notes.unshift(note);
+    async getNotes() {
+      this.notesLoaded = false;
+      onSnapshot(
+        query(notesColectionRef, orderBy("date", "desc")),
+        (querySnapshot) => {
+          let notes: NoteType[] = [];
+          querySnapshot.forEach((doc): void | NoteType => {
+            let note: NoteType = {
+              id: doc.id,
+              content: doc.data().content,
+              date: doc.data().date,
+            };
+            notes.push(note);
+          });
+
+          this.notes = notes;
+          this.notesLoaded = true;
+        }
+      );
     },
-    deleteNote(id: string) {
-      this.notes = this.notes.filter((note) => {
-        return note.id !== id;
+
+    async addNewNote(value: string) {
+      let date = currentDate();
+      await setDoc(doc(db, "notes", randomId()), {
+        date: date,
+        content: value,
       });
     },
-    editNote(id: string, content: string) {
-      let index = this.notes.findIndex((note) => note.id === id);
-      this.notes[index].content = content;
+    async deleteNote(id: string) {
+      await deleteDoc(doc(notesColectionRef, id));
+    },
+
+    async editNote(id: string, content: string) {
+      let date = currentDate();
+      await updateDoc(doc(notesColectionRef, id), {
+        date: date,
+        content: content,
+      });
     },
   },
   getters: {

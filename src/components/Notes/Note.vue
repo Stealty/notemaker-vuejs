@@ -2,6 +2,8 @@
 import { computed, reactive } from "vue";
 import { RouterLink } from "vue-router";
 import ModalDeleteNote from "@/components/Notes/ModalDeleteNote.vue";
+import { useDateFormat } from "@vueuse/shared";
+import { useNow } from "@vueuse/core";
 
 const props = defineProps({
   note: {
@@ -20,14 +22,22 @@ const characterLenght = computed(() => {
 const modals = reactive({
   deleteNote: false,
 });
+
+const formatedDate = useDateFormat(
+  props.note.date.value,
+  "DD MMMM YYYY / HH:mm"
+);
 </script>
 
 <template>
   <div class="card mb-5">
-    <div class="card-content">
+    <div class="card-content p-4">
       <p style="word-wrap: break-word">{{ note.content }}</p>
     </div>
-    <div class="has-text-right has-text-grey-light mt-2 mr-4">
+    <div
+      class="has-text-right has-text-grey-light p-4 is-justify-content-space-between is-flex"
+    >
+      <small>{{ formatedDate }}</small>
       <small>{{ characterLenght }}</small>
     </div>
     <footer class="card-footer">
