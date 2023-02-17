@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useStoreNotes } from "@/stores/globalStore";
+import { useStoreNotes } from "@/stores/storeNotes";
 import { onClickOutside } from "@vueuse/core";
 import { onMounted, onUnmounted, ref } from "vue";
 

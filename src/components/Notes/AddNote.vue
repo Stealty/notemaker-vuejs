@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useStoreNotes } from "@/stores/globalStore";
+import { useStoreNotes } from "@/stores/storeNotes";
 import { vAutoFocus } from "@/directives/vAutoFocus";
 import { ref } from "vue";
 import { useWatchCharacters } from "@/use/useWatchCharacters";

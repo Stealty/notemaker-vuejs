@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
-import { useStoreNotes } from "@/stores/globalStore";
+import { useStoreNotes } from "@/stores/storeNotes";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { vAutoFocus } from "@/directives/vAutoFocus";
