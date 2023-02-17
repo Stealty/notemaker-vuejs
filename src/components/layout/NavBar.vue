@@ -17,8 +17,7 @@ onClickOutside(navBarRef, () => (isActiveMenu.value = false));
     <div class="container is-max-desktop px-2">
       <div class="navbar-brand">
         <div class="navbar-item is-size-4 is-family-monospace">Notemaker</div>
-        <a
-          role="button"
+        <button
           class="navbar-burger"
           :class="{ 'is-active': isActiveMenu }"
           aria-label="menu"
@@ -29,7 +28,7 @@ onClickOutside(navBarRef, () => (isActiveMenu.value = false));
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
-        </a>
+        </button>
       </div>
     </div>
 
