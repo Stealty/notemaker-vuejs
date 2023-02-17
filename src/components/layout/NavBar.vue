@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
+import { useStoreAuth } from "@/stores/storeAuth";
 const isActiveMenu = ref(false);
 const navBarRef = ref(null);
 
+const storeAuth = useStoreAuth();
+
 onClickOutside(navBarRef, () => (isActiveMenu.value = false));
+
+const logout = () => {
+  isActiveMenu.value = false;
+  storeAuth.logoutUser();
+};
 </script>
 
 <template>
@@ -37,9 +45,14 @@ onClickOutside(navBarRef, () => (isActiveMenu.value = false));
       class="navbar-menu"
       :class="{ 'is-active': isActiveMenu }"
     >
-      <div class="navbar-start"></div>
-
       <div class="navbar-end">
+        <button
+          v-if="storeAuth.user.id"
+          @click="logout"
+          class="button is-small is-info m-3"
+        >
+          Log out {{ storeAuth.user.email }}
+        </button>
         <RouterLink
           @click="isActiveMenu = false"
           class="navbar-item"
