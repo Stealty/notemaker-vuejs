@@ -1,3 +1,4 @@
+import { useStoreAuth } from "./../stores/storeAuth";
 import {
   createRouter,
   createWebHashHistory,
@@ -34,6 +35,17 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes: routes,
+});
+
+router.beforeEach(async (to, from) => {
+  const storeAuth = useStoreAuth();
+  if (!storeAuth.user.id && to.name !== "auth") {
+    window.alert("You must be logged in");
+    return { name: "auth" };
+  }
+  if (storeAuth.user.id && to.name === "auth") {
+    return false;
+  }
 });
 
 export default router;
