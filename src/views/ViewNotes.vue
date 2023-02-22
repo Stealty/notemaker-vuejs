@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import Note from "@/components/Notes/Note.vue";
-import { onMounted } from "vue";
 import { useStoreNotes } from "@/stores/storeNotes";
 import AddNote from "@/components/Notes/AddNote.vue";
 
 const storeNotes = useStoreNotes();
-
-onMounted(() => {
-  storeNotes.getNotes();
-});
 </script>
 
 <template>

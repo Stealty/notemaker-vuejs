@@ -1,3 +1,4 @@
+import { useStoreNotes } from "./storeNotes";
 import { defineStore } from "pinia";
 import { auth } from "@/database/firebase";
 import {
@@ -28,14 +29,17 @@ export const useStoreAuth = defineStore("storeAuth", {
 
   actions: {
     init() {
+      const storeNotes = useStoreNotes();
       onAuthStateChanged(auth, (user: null | User) => {
         if (user) {
           this.user.id = user.uid;
           this.user.email = user.email;
           this.router.push("/");
+          storeNotes.init();
         } else {
           this.user = {};
           this.router.replace("/auth");
+          storeNotes.clearNotes();
         }
       });
     },

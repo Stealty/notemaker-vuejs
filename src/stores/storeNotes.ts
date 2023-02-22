@@ -1,3 +1,4 @@
+import { useStoreAuth } from "./storeAuth";
 import { randomId } from "@/utils/randomId";
 import { defineStore } from "pinia";
 import {
@@ -9,6 +10,11 @@ import {
   query,
   deleteDoc,
   updateDoc,
+  Firestore,
+  DocumentReference,
+  Query,
+  type DocumentData,
+  type Unsubscribe,
 } from "firebase/firestore";
 import { db } from "@/database/firebase";
 import { currentDate } from "@/utils/currentDate";
@@ -19,7 +25,10 @@ type NoteType = {
   date: string;
 };
 
-const notesColectionRef = collection(db, "notes");
+let notesColectionRef: Firestore | Query<DocumentData>;
+let notesColetionQuery: Query<DocumentData> | DocumentReference<unknown> | any;
+let getNotesSnapshot: Unsubscribe | null;
+
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
     return {
@@ -28,20 +37,38 @@ export const useStoreNotes = defineStore("storeNotes", {
     };
   },
   actions: {
+    async init() {
+      const storeAuth = useStoreAuth();
+      notesColectionRef = collection(
+        db,
+        "users",
+        storeAuth.user.id as string,
+        "notes"
+      );
+      notesColetionQuery = query(notesColectionRef, orderBy("date", "desc"));
+      await this.getNotes();
+    },
     async getNotes() {
       this.notesLoaded = false;
-      onSnapshot(
-        query(notesColectionRef, orderBy("date", "desc")),
-        (querySnapshot) => {
+      if (getNotesSnapshot) getNotesSnapshot();
+
+      getNotesSnapshot = onSnapshot(
+        notesColetionQuery,
+        (querySnapshot: any) => {
           let notes: NoteType[] = [];
-          querySnapshot.forEach((doc): void | NoteType => {
-            let note: NoteType = {
-              id: doc.id,
-              content: doc.data().content,
-              date: doc.data().date,
-            };
-            notes.push(note);
-          });
+          querySnapshot.forEach(
+            (doc: {
+              id: any;
+              data: () => { (): any; new (): any; content: any; date: any };
+            }): void | NoteType => {
+              let note: NoteType = {
+                id: doc.id,
+                content: doc.data().content,
+                date: doc.data().date,
+              };
+              notes.push(note);
+            }
+          );
 
           this.notes = notes;
           this.notesLoaded = true;
@@ -49,20 +76,25 @@ export const useStoreNotes = defineStore("storeNotes", {
       );
     },
 
+    clearNotes() {
+      this.notes = [];
+    },
+
     async addNewNote(value: string) {
       let date = currentDate();
-      await setDoc(doc(db, "notes", randomId()), {
+      await setDoc(doc(notesColectionRef as any), {
         date: date,
         content: value,
       });
     },
+
     async deleteNote(id: string) {
-      await deleteDoc(doc(notesColectionRef, id));
+      await deleteDoc(doc(notesColectionRef as any, id));
     },
 
     async editNote(id: string, content: string) {
       let date = currentDate();
-      await updateDoc(doc(notesColectionRef, id), {
+      await updateDoc(doc(notesColectionRef as any, id), {
         date: date,
         content: content,
       });
